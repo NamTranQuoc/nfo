@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "403029872228",
+    "project_id": "nfo-app-8dc6d",
+    "storage_bucket": "nfo-app-8dc6d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:403029872228:android:0017c3390cd853816d5971",
+        "android_client_info": {
+          "package_name": "com.qn.nfo"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "403029872228-hdg5bnoc665vpg34icnisdcuebjkm8ha.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBmcWcBzJZUn7AIJ62vswz1qXEE2HCWyfQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "403029872228-hdg5bnoc665vpg34icnisdcuebjkm8ha.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
