@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:nfo/theme/constant_theme.dart';
+import 'package:nfo/common/constant_theme.dart';
 
 class PersonalInfoScreen extends StatefulWidget {
   const PersonalInfoScreen({Key? key}) : super(key: key);

@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:nfo/component/search.dart';
 import 'package:nfo/screen/auction_screen.dart';
 import 'package:nfo/screen/on_sale_screen.dart';
 import 'package:nfo/screen/personal_info_screen.dart';
-import 'package:nfo/theme/constant_theme.dart';
+import 'package:nfo/common/constant_theme.dart';
 
 import '../component/bottom_bar_view.dart';
 import '../domain/tabIcon_data.dart';
 import 'add_product_screen.dart';
-import 'home/home_screen.dart';
+import 'home_screen.dart';
 
 class NavigationScreen extends StatefulWidget {
   const NavigationScreen({Key? key}) : super(key: key);
@@ -36,7 +37,7 @@ class _NavigationScreenState extends State<NavigationScreen> with TickerProvider
 
     animationController = AnimationController(duration: const Duration(milliseconds: 600), vsync: this);
     tabBody = const HomeScreen();
-    appbar = const Text("Search");
+    appbar = const Search();
     super.initState();
   }
 
@@ -106,7 +107,7 @@ class _NavigationScreenState extends State<NavigationScreen> with TickerProvider
                 }
                 setState(() {
                   tabBody = const HomeScreen();
-                  appbar = const Text("Search");
+                  appbar = const Search();
                 });
               });
             } else if (index == 1) {

@@ -13,9 +13,9 @@ Future<List<Category>> getAllCategory() async {
   List<Category> category = [];
   await db.get()
       .then((QuerySnapshot querySnapshot) {
-    querySnapshot.docs.forEach((doc) {
-      category.add(Category(id: doc.id, name: doc["name"]));
-    });
+    for (var doc in querySnapshot.docs) {
+      category.add(Category.fromSnapshot(doc));
+    }
   });
   return category;
 }

@@ -1,17 +1,19 @@
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class Category {
-  final String id;
-  final String name;
+  String id;
+  String name;
 
   Category({
     required this.id,
     required this.name
   });
 
-  Category.fromJson(Map<String, Object?> json)
+  Category.fromSnapshot(QueryDocumentSnapshot doc)
       : this(
-    id: json['id']! as String,
-    name: json['name']! as String
+    id: doc.id,
+    name: doc['name']! as String
   );
 
   Map<String, Object?> toJson() {

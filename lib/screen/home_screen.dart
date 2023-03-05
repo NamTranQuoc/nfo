@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:nfo/theme/constant_theme.dart';
+import 'package:nfo/common/constant_theme.dart';
+
+import 'home/category_view.dart';
+import 'home/featured_products_view.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -14,7 +17,52 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Container(
       color: ConstantTheme.background,
-      child: const Text("Home")
+      child: ListView(
+        children: [
+          getCategoryUI(),
+          getFeaturedProducts()
+        ],
+      )
+    );
+  }
+
+  Widget getCategoryUI() {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        const Padding(
+          padding: EdgeInsets.only(top: 8.0, left: 18, right: 16),
+          child: Text(
+            'Ngành hàng',
+            textAlign: TextAlign.left,
+            style: ConstantTheme.ts1,
+          ),
+        ),
+        CategoryListView(
+          callBack: () {},
+        ),
+      ],
+    );
+  }
+
+  Widget getFeaturedProducts() {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        const Padding(
+          padding: EdgeInsets.only(top: 8.0, left: 18, right: 16),
+          child: Text(
+            'Nổi bật',
+            textAlign: TextAlign.left,
+            style: ConstantTheme.ts1,
+          ),
+        ),
+        FeaturedProductsView(
+          callBack: () {},
+        ),
+      ],
     );
   }
 }
