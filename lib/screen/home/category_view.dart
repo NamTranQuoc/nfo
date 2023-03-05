@@ -46,7 +46,7 @@ class _CategoryListViewState extends State<CategoryListView>
       decoration: BoxDecoration(
           color: isSelected
               ? ConstantTheme.c3
-              : ConstantTheme.c1,
+              : ConstantTheme.nearlyWhite,
           borderRadius: const BorderRadius.all(Radius.circular(24.0)),
           border: Border.all(color: ConstantTheme.c3)),
       child: Material(
@@ -75,7 +75,7 @@ class _CategoryListViewState extends State<CategoryListView>
                   fontSize: 12,
                   letterSpacing: 0.27,
                   color: isSelected
-                      ? ConstantTheme.c1
+                      ? ConstantTheme.nearlyWhite
                       : ConstantTheme.c3,
                 ),
               ),

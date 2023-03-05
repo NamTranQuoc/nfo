@@ -22,7 +22,7 @@ class _Search extends State<Search> {
         ),
         keyboardType: TextInputType.text,
         decoration: const InputDecoration(
-          fillColor: ConstantTheme.c1,
+          fillColor: ConstantTheme.nearlyWhite,
           filled: true,
           suffixIcon: Icon(Icons.search, color: ConstantTheme.c3),
           hintText: 'Tìm kiếm sản phẩm',

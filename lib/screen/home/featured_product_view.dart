@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:nfo/common/constant_theme.dart';
+import 'package:nfo/component/product_view.dart';
 
 import '../../common/parse.dart';
 import '../../entity/product.dart';
@@ -31,14 +32,14 @@ class FeaturedProductView extends StatelessWidget {
             child: InkWell(
               splashColor: Colors.transparent,
               onTap: () {
-                // Navigator.push<dynamic>(
-                //   context,
-                //   MaterialPageRoute<dynamic>(
-                //     builder: (BuildContext context) => ProductInfoScreen(
-                //       product: product,
-                //     ),
-                //   ),
-                // );
+                Navigator.push<dynamic>(
+                  context,
+                  MaterialPageRoute<dynamic>(
+                    builder: (BuildContext context) => ProductView(
+                      product: product,
+                    ),
+                  ),
+                );
               },
               child: SizedBox(
                 width: 300,
@@ -73,7 +74,7 @@ class FeaturedProductView extends StatelessWidget {
                                             fontSize: 16,
                                             letterSpacing: 0.27,
                                             color:
-                                                ConstantTheme.c5,
+                                                ConstantTheme.darkerText,
                                           ),
                                         ),
                                       ),
@@ -82,49 +83,7 @@ class FeaturedProductView extends StatelessWidget {
                                       ),
                                       Padding(
                                         padding: const EdgeInsets.only(
-                                            right: 16, bottom: 8),
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.center,
-                                          children: <Widget>[
-                                            // Text(
-                                            //   'Đã bán ${product!.numberOfSold}',
-                                            //   textAlign: TextAlign.left,
-                                            //   style: const TextStyle(
-                                            //     fontWeight: FontWeight.w200,
-                                            //     fontSize: 12,
-                                            //     letterSpacing: 0.27,
-                                            //     color:
-                                            //         DesignCourseAppTheme.grey,
-                                            //   ),
-                                            // ),
-                                            Row(
-                                              children: <Widget>[
-                                                Text(
-                                                  '${product!.evaluate}',
-                                                  textAlign: TextAlign.left,
-                                                  style: const TextStyle(
-                                                    fontWeight: FontWeight.w200,
-                                                    fontSize: 18,
-                                                    letterSpacing: 0.27,
-                                                    color: ConstantTheme.c4,
-                                                  ),
-                                                ),
-                                                const Icon(
-                                                  Icons.star,
-                                                  color: ConstantTheme.c3,
-                                                  size: 20,
-                                                ),
-                                              ],
-                                            )
-                                          ],
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding: const EdgeInsets.only(
-                                            bottom: 16, right: 16),
+                                            bottom: 8, right: 16),
                                         child: Row(
                                           mainAxisAlignment:
                                               MainAxisAlignment.spaceBetween,
@@ -141,6 +100,26 @@ class FeaturedProductView extends StatelessWidget {
                                                 color: ConstantTheme.c3,
                                               ),
                                             ),
+                                          ],
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.only(
+                                            right: 8, bottom: 8),
+                                        child: Row(
+                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                          crossAxisAlignment: CrossAxisAlignment.center,
+                                          children: <Widget>[
+                                            Text(
+                                              'Tổng ${getTotalQuantity()}',
+                                              textAlign: TextAlign.left,
+                                              style: const TextStyle(
+                                                fontWeight: FontWeight.w200,
+                                                fontSize: 18,
+                                                letterSpacing: 0.27,
+                                                color: ConstantTheme.c4,
+                                              ),
+                                            ),
                                             Container(
                                               decoration: const BoxDecoration(
                                                 color: ConstantTheme.c3,
@@ -151,7 +130,7 @@ class FeaturedProductView extends StatelessWidget {
                                                 padding: EdgeInsets.all(4.0),
                                                 child: Icon(
                                                   Icons.add,
-                                                  color: ConstantTheme.c1,
+                                                  color: ConstantTheme.nearlyWhite,
                                                 ),
                                               ),
                                             )
@@ -190,5 +169,13 @@ class FeaturedProductView extends StatelessWidget {
         );
       },
     );
+  }
+
+  int getTotalQuantity() {
+    int total = 0;
+    for (var element in product!.types) {
+      total = total + element.quantity;
+    }
+    return total;
   }
 }
