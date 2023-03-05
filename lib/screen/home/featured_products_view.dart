@@ -38,7 +38,7 @@ class _FeaturedProductsViewState extends State<FeaturedProductsView>
     //     createdDate: DateTime.now(),
     //     name: 'Apple MacBook Air (2020) M1 Chip, 13.3-inch, 8GB, 256GB SSD',
     //     evaluate: 4.9,
-    //     description: 'Tính nfalseng nổi bật',
+    //     description: 'Tính năng nổi bật\n • Chip M1 do Apple thiết kế tạo ra một cú nhảy vọt về hiệu năng máy học, CPU và GPU\n • Tăng thời gian sử dụng với thời lượng pin lên đến 18 giờ1\n • CPU 8 lõi cho tốc độ nhanh hơn đến 3.5x, xử lý công việc nhanh chóng hơn bao giờ hết 2\n • GPU lên đến 8 lõi với tốc độ xử lý đồ họa nhanh hơn đến 5x cho các ứng dụng và game đồ họa khủng2\n • Neural Engine 16 lõi cho công nghệ máy học hiện đại\n • Bộ nhớ thống nhất 8GB giúp bạn làm việc gì cũng nhanh chóng và trôi chảy\n • Ổ lưu trữ SSD siêu nhanh giúp mở các ứng dụng và tập tin chỉ trong tích tắc\n • Thiết kế không quạt giảm tối đa tiếng ồn khi sử dụng\n • Màn hình Retina 13.3 inch với dải màu rộng P3 cho hình ảnh sống động và chi tiết ấn tượng3\n • Camera FaceTime HD với bộ xử lý tín hiệu hình ảnh tiên tiến cho các cuộc gọi video đẹp hình, rõ tiếng hơn\n • Bộ ba micro phối hợp tập trung thu giọng nói của bạn, không thu tạp âm môi trường\n • Wi-Fi 6 thế hệ mới giúp kết nối nhanh hơn\n • Hai cổng Thunderbolt / USB 4 để sạc và kết nối phụ kiện\n • Bàn phím Magic Keyboard có đèn nền và Touch ID giúp mở khóa và thanh toán an toàn hơn\n • macOS Big Sur với thiết kế mới đầy táo bạo cùng nhiều cập nhật quan trọng cho các ứng dụng Safari, Messages và Maps',
     //     isFeatured: false);
     //
     // addProduct(product1);
@@ -67,14 +67,14 @@ class _FeaturedProductsViewState extends State<FeaturedProductsView>
               return ListView.builder(
                 padding: const EdgeInsets.only(
                     top: 0, bottom: 0, right: 16, left: 16),
-                itemCount: snapshot.data?.length,
+                itemCount: snapshot.data!.length,
                 scrollDirection: Axis.horizontal,
                 itemBuilder: (BuildContext context, int index) {
                   final Animation<double> animation =
                       Tween<double>(begin: 0.0, end: 1.0).animate(
                           CurvedAnimation(
                               parent: animationController!,
-                              curve: Interval((1 / 1) * index, 1.0,
+                              curve: Interval((1 / snapshot.data!.length) * index, 1.0,
                                   curve: Curves.fastOutSlowIn)));
                   animationController?.forward();
                   return FeaturedProductView(

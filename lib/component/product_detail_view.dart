@@ -7,16 +7,16 @@ import 'package:nfo/entity/product_type.dart';
 import '../common/parse.dart';
 import '../entity/product.dart';
 
-class ProductView extends StatefulWidget {
-  const ProductView({Key? key, this.product}) : super(key: key);
+class ProductDetailView extends StatefulWidget {
+  const ProductDetailView({Key? key, this.product}) : super(key: key);
 
   final Product? product;
 
   @override
-  _ProductView createState() => _ProductView();
+  _ProductDetailView createState() => _ProductDetailView();
 }
 
-class _ProductView extends State<ProductView>
+class _ProductDetailView extends State<ProductDetailView>
     with TickerProviderStateMixin {
   final double infoHeight = 364.0;
   AnimationController? animationController;
@@ -213,17 +213,20 @@ class _ProductView extends State<ProductView>
                               child: Padding(
                                 padding: const EdgeInsets.only(
                                     left: 16, right: 16, top: 8, bottom: 8),
-                                child: Text(
-                                  widget.product!.description,
-                                  textAlign: TextAlign.justify,
-                                  style: const TextStyle(
-                                    fontWeight: FontWeight.w200,
-                                    fontSize: 14,
-                                    letterSpacing: 0.27,
-                                    color: ConstantTheme.grey,
+                                child: SingleChildScrollView(
+                                  scrollDirection: Axis.vertical,
+                                  child: Text(
+                                    widget.product!.description,
+                                    textAlign: TextAlign.justify,
+                                    style: const TextStyle(
+                                      fontWeight: FontWeight.w200,
+                                      fontSize: 14,
+                                      letterSpacing: 0.27,
+                                      color: ConstantTheme.grey,
+                                    ),
+                                    maxLines: 100,
+                                    overflow: TextOverflow.ellipsis,
                                   ),
-                                  maxLines: 3,
-                                  overflow: TextOverflow.ellipsis,
                                 ),
                               ),
                             ),

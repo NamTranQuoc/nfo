@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:nfo/common/constant_theme.dart';
+import 'package:nfo/screen/home/list_product_view.dart';
 
 import 'home/category_view.dart';
 import 'home/featured_products_view.dart';
@@ -20,7 +21,8 @@ class _HomeScreenState extends State<HomeScreen> {
       child: ListView(
         children: [
           getCategoryUI(),
-          getFeaturedProducts()
+          getFeaturedProducts(),
+          getProducts()
         ],
       )
     );
@@ -60,6 +62,26 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ),
         FeaturedProductsView(
+          callBack: () {},
+        ),
+      ],
+    );
+  }
+
+  Widget getProducts() {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        const Padding(
+          padding: EdgeInsets.only(top: 8.0, left: 18, right: 16),
+          child: Text(
+            'Sản Phẩm',
+            textAlign: TextAlign.left,
+            style: ConstantTheme.ts1,
+          ),
+        ),
+        ListProductView(
           callBack: () {},
         ),
       ],
