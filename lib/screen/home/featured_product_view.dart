@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:nfo/common/constant_theme.dart';
+import 'package:nfo/common/storage.dart';
 import 'package:nfo/component/product_detail_view.dart';
 
 import '../../common/parse.dart';
@@ -156,7 +157,7 @@ class FeaturedProductView extends StatelessWidget {
                                 const BorderRadius.all(Radius.circular(16.0)),
                             child: AspectRatio(
                                 aspectRatio: 1.0,
-                                child: Image.network(product!.images.first)),
+                                child: Image.network(getDownloadUrl(product!.images.first))),
                           )
                         ],
                       ),

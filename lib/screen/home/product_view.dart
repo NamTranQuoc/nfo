@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../common/constant_theme.dart';
 import '../../common/parse.dart';
+import '../../common/storage.dart';
 import '../../component/product_detail_view.dart';
 import '../../entity/product.dart';
 
@@ -156,7 +157,7 @@ class ProductView extends StatelessWidget {
                               const BorderRadius.all(Radius.circular(16.0)),
                           child: AspectRatio(
                               aspectRatio: 1.28,
-                              child: Image.network(product!.images.first)),
+                              child: Image.network(getDownloadUrl(product!.images.first))),
                         ),
                       ),
                     ),
