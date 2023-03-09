@@ -8,7 +8,7 @@ import 'package:select_form_field/select_form_field.dart';
 Widget textField(String label,
     TextEditingController controller,
     {TextInputType type = TextInputType.text,
-    int maxLine = 1}) {
+    int maxLine = 1, enable = true, validator}) {
   return Container(
       margin: EdgeInsets.only(right: 25, left: 25, top: 10),
       padding: EdgeInsets.only(left: 10, right: 10),
@@ -16,10 +16,13 @@ Widget textField(String label,
           borderRadius: BorderRadius.all(Radius.circular(8)),
           border: Border.all(color: Colors.blueAccent)
       ),
-      child: TextField(
+      child: TextFormField(
+        autovalidateMode: AutovalidateMode.onUserInteraction,
         controller: controller,
         keyboardType: type,
         maxLines: maxLine,
+        enabled: enable,
+        validator: validator,
         style: const TextStyle(
           fontFamily: 'WorkSans',
           fontWeight: FontWeight.bold,

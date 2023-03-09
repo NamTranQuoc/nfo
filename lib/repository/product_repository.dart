@@ -2,12 +2,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:nfo/entity/product.dart';
 
-import '../entity/category.dart';
-
 final db = FirebaseFirestore.instance.collection('product');
 
-void addProduct(Product product) {
-  db.add(product.toJson());
+Future<void> addProduct(Product product) async {
+  await db.add(product.toJson());
 }
 
 Future<List<Product>> getAllProduct() async {

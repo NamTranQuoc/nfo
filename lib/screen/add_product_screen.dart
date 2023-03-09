@@ -18,6 +18,8 @@ class AddProductScreen extends StatefulWidget {
 }
 
 class _AddProductScreenState extends State<AddProductScreen> {
+  var _isLoading = false;
+  bool _errorImage = false;
   final ImagePicker _picker = ImagePicker();
   List<File> imageFiles = [];
   List<ProductTypeController> types = [ProductTypeController()];
@@ -25,125 +27,156 @@ class _AddProductScreenState extends State<AddProductScreen> {
   TextEditingController description = TextEditingController();
   TextEditingController category = TextEditingController();
   List<dynamic> selected = [];
+  final _formKey = GlobalKey<FormState>();
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
   }
-  
+
   @override
   Widget build(BuildContext context) {
     double widthImage = (MediaQuery.of(context).size.width / 3) - 30;
     return Container(
-      color: ConstantTheme.background,
-      child: Scaffold(
-        backgroundColor: Colors.transparent,
-        body: Column(
-          children: [
-            getAppBarUI(),
-            Expanded(
-              child: SingleChildScrollView(
-                child: Column(
-                  children: <Widget>[
-                    const Padding(
-                      padding: EdgeInsets.only(top: 8.0, left: 16, right: 16),
-                      child: Text(
-                        'Hình ảnh',
-                        textAlign: TextAlign.left,
-                        style: ConstantTheme.ts2,
-                      ),
-                    ),
-                    listImage(widthImage),
-                    const Divider(
-                      thickness: 2,
-                      endIndent: 32,
-                      indent: 32,
-                    ),
-                    const Padding(
-                      padding: EdgeInsets.only(top: 8.0, left: 16, right: 16),
-                      child: Text(
-                        'Thông tin chung',
-                        textAlign: TextAlign.left,
-                        style: ConstantTheme.ts2,
-                      ),
-                    ),
-                    textField("Tên sản phẩm", name, type: TextInputType.text),
-                    textField("Mô tả", description, type: TextInputType.multiline, maxLine: 4),
-                    // multiSelectField("Ngành hàng", widget._categories, selected, setCategory)
-                    const Divider(
-                      thickness: 2,
-                      endIndent: 32,
-                      indent: 32,
-                    ),
-                    const Padding(
-                      padding: EdgeInsets.only(top: 8.0, left: 16, right: 16),
-                      child: Text(
-                        'Loại Sản phẩm',
-                        textAlign: TextAlign.left,
-                        style: ConstantTheme.ts2,
-                      ),
-                    ),
-                    listType(widthImage)
-                  ],
-                ),
-              ),
-            ),
-            const Divider(
-              height: 1,
-            ),
-            Padding(
-              padding: const EdgeInsets.only(
-                  left: 16, right: 16, bottom: 16, top: 8),
-              child: Container(
-                height: 48,
-                decoration: BoxDecoration(
-                  color: ConstantTheme.nearlyBlue,
-                  borderRadius: const BorderRadius.all(Radius.circular(16.0)),
-                  boxShadow: <BoxShadow>[
-                    BoxShadow(
-                      color: Colors.grey.withOpacity(0.6),
-                      blurRadius: 8,
-                      offset: const Offset(4, 4),
-                    ),
-                  ],
-                ),
-                child: Material(
-                  color: Colors.transparent,
-                  child: InkWell(
-                    borderRadius: const BorderRadius.all(Radius.circular(24.0)),
-                    highlightColor: Colors.transparent,
-                    onTap: () {
-                      uploadImages().then((value) {
-                        Product product1 = Product(images: value,
-                            types: types.map((e) {
-                              return ProductType.fromController(e);
-                            }).toList(),
-                            createdDate: DateTime.now(),
-                            name: name.text,
-                            evaluate: 0.0,
-                            description: description.text,
-                            isFeatured: false);
-                        addProduct(product1);
-                      });
-                    },
-                    child: const Center(
-                      child: Text(
-                        'Thêm',
-                        style: TextStyle(
-                            fontWeight: FontWeight.w500,
-                            fontSize: 18,
-                            color: Colors.white),
+        color: ConstantTheme.background,
+        child: Scaffold(
+            backgroundColor: Colors.transparent,
+            body: Column(
+              children: [
+                getAppBarUI(),
+                Expanded(
+                  child: SingleChildScrollView(
+                    child: Form(
+                      key: _formKey,
+                      child: Column(
+                        children: <Widget>[
+                          const Padding(
+                            padding: EdgeInsets.only(top: 8.0, left: 16, right: 16),
+                            child: Text(
+                              'Hình ảnh',
+                              textAlign: TextAlign.left,
+                              style: ConstantTheme.ts2,
+                            ),
+                          ),
+                          listImage(widthImage),
+                          const Divider(
+                            thickness: 2,
+                            endIndent: 32,
+                            indent: 32,
+                          ),
+                          const Padding(
+                            padding: EdgeInsets.only(top: 8.0, left: 16, right: 16),
+                            child: Text(
+                              'Thông tin chung',
+                              textAlign: TextAlign.left,
+                              style: ConstantTheme.ts2,
+                            ),
+                          ),
+                          textField("Tên sản phẩm", name, type: TextInputType.text, enable: !_isLoading, validator: validateNotBlank),
+                          textField("Mô tả", description, type: TextInputType.multiline, maxLine: 4, enable: !_isLoading, validator: validateNotBlank),
+                          // multiSelectField("Ngành hàng", widget._categories, selected, setCategory)
+                          const Divider(
+                            thickness: 2,
+                            endIndent: 32,
+                            indent: 32,
+                          ),
+                          const Padding(
+                            padding: EdgeInsets.only(top: 8.0, left: 16, right: 16),
+                            child: Text(
+                              'Loại Sản phẩm',
+                              textAlign: TextAlign.left,
+                              style: ConstantTheme.ts2,
+                            ),
+                          ),
+                          listType(widthImage)
+                        ],
                       ),
                     ),
                   ),
                 ),
-              ),
+                const Divider(
+                  height: 1,
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(
+                      left: 16, right: 16, bottom: 16, top: 8),
+                  child: Container(
+                    height: 48,
+                    decoration: BoxDecoration(
+                      color: ConstantTheme.nearlyBlue,
+                      borderRadius: const BorderRadius.all(Radius.circular(16.0)),
+                      boxShadow: <BoxShadow>[
+                        BoxShadow(
+                          color: Colors.grey.withOpacity(0.6),
+                          blurRadius: 8,
+                          offset: const Offset(4, 4),
+                        ),
+                      ],
+                    ),
+                    child: Material(
+                      color: Colors.transparent,
+                      child: OutlinedButton.icon(
+                        onPressed: _isLoading ? null : () {
+                          setState(() => _isLoading = true);
+                          if (_formKey.currentState!.validate() && imageFiles.isNotEmpty) {
+                            uploadImages().then((value) {
+                              Product product1 = Product(images: value,
+                                  types: types.map((e) {
+                                    return ProductType.fromController(e);
+                                  }).toList(),
+                                  createdDate: DateTime.now(),
+                                  name: name.text,
+                                  evaluate: 0.0,
+                                  description: description.text,
+                                  isFeatured: false);
+                              addProduct(product1).then((value) {
+                                Navigator.pop(context);
+                              });
+                            });
+                          } else {
+                            if (imageFiles.isEmpty) {
+                              _errorImage = true;
+                            }
+                            setState(() {
+                              _isLoading = false;
+                            });
+                          }
+                        },
+                        style: ButtonStyle(
+                            shape: MaterialStateProperty.all(RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(16.0)
+                            )),
+                            backgroundColor: MaterialStateProperty.all(ConstantTheme.nearlyBlue),
+                          side: MaterialStateProperty.all(const BorderSide(width: 5.0, color: ConstantTheme.nearlyBlue)),
+                        ),
+                        icon: _isLoading
+                            ? Container(
+                          width: 24,
+                          height: 24,
+                          padding: const EdgeInsets.all(2.0),
+                          child: const CircularProgressIndicator(
+                            color: ConstantTheme.c6,
+                            strokeWidth: 3,
+                          ),
+                        )
+                            : const Icon(Icons.add, color: ConstantTheme.c6,),
+                        label: const Text('Lưu sản phẩm', style: TextStyle(color: ConstantTheme.c6),),
+                      ),
+                    ),
+                  ),
+                )
+              ],
             )
-          ],
         )
-      )
     );
+  }
+
+  String? validateNotBlank(value) {
+    if (value == null || value.isEmpty) {
+      return 'Dữ liệu không được để trống';
+    }
+    return null;
   }
 
   Future<List<String>> uploadImages() async {
@@ -166,11 +199,14 @@ class _AddProductScreenState extends State<AddProductScreen> {
   }
 
   _getFromGallery() async {
+    if (_errorImage) {
+      setState(() => _errorImage = false);
+    }
     _picker.pickMultiImage().then((value) {
+      imageFiles.clear();
       if (value.isNotEmpty) {
         for (var element in value) {
           imageFiles.add(File(element.path));
-          // uploadImage(File(element.path));
         }
         setState(() {});
       }
@@ -192,12 +228,12 @@ class _AddProductScreenState extends State<AddProductScreen> {
               border: Border.all(color: Colors.blueAccent)
           ),
           child: ClipRRect(
-            borderRadius: BorderRadius.circular(8.0),
-            child: AspectRatio(
-              aspectRatio: 1.0,
-              child: Image.file(element),
-            ))),
-          );
+              borderRadius: BorderRadius.circular(8.0),
+              child: AspectRatio(
+                aspectRatio: 1.0,
+                child: Image.file(element),
+              ))),
+      );
       if (items.length == 3) {
         widgets.add(Row(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -219,13 +255,22 @@ class _AddProductScreenState extends State<AddProductScreen> {
   }
 
   Widget buttonSelectImage() {
-    return RaisedButton(
-      color: ConstantTheme.nearlyBlue,
+    return TextButton(
       onPressed: () {
-        _getFromGallery();
+        if (!_isLoading) {
+          _getFromGallery();
+        }
       },
-      child: const Text("Chọn hình ảnh",
-        style: TextStyle(color: ConstantTheme.c6),),
+      child: (!_errorImage) ? const Text("Chọn hình ảnh",
+        style: TextStyle(color: ConstantTheme.nearlyBlue),)
+          : Column(
+        children: const [
+          Text("Chọn hình ảnh",
+            style: TextStyle(color: ConstantTheme.nearlyBlue)),
+          Text("Chọn ít nhất một hình ảnh",
+              style: TextStyle(color: ConstantTheme.nearlyRed, fontSize: 11))
+        ],
+      )
     );
   }
 
@@ -304,22 +349,24 @@ class _AddProductScreenState extends State<AddProductScreen> {
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        RaisedButton(
-          color: ConstantTheme.nearlyBlue,
+        TextButton(
           onPressed: () {
-            _addType();
+            if (!_isLoading) {
+              _addType();
+            }
           },
           child: const Text("Thêm",
-              style: TextStyle(color: ConstantTheme.c6)),
+              style: TextStyle(color: ConstantTheme.nearlyBlue)),
         ),
         const SizedBox(width: 10,),
-        (types.length > 1) ? RaisedButton(
-          color: ConstantTheme.nearlyRed,
+        (types.length > 1) ? TextButton(
           onPressed: () {
-            _removeType();
+            if (!_isLoading) {
+              _removeType();
+            }
           },
           child: const Text("Xoá",
-              style: TextStyle(color: ConstantTheme.c6)),
+              style: TextStyle(color: ConstantTheme.nearlyRed)),
         ) : const SizedBox()
       ],
     );
@@ -335,9 +382,9 @@ class _AddProductScreenState extends State<AddProductScreen> {
       ),
       child: Column(
         children: [
-          textField("Tên loại", productType.name, type: TextInputType.text),
-          textField("Giá", productType.price, type: TextInputType.number),
-          textField("Số lượng", productType.quantity, type: TextInputType.number),
+          textField("Tên loại", productType.name, type: TextInputType.text, enable: !_isLoading, validator: validateNotBlank),
+          textField("Giá", productType.price, type: TextInputType.number, enable: !_isLoading, validator: validateNotBlank),
+          textField("Số lượng", productType.quantity, type: TextInputType.number, enable: !_isLoading, validator: validateNotBlank),
         ],
       ),
     );
