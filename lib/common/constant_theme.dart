@@ -11,12 +11,20 @@ class ConstantTheme {
   static const Color c6 = Color(0xFFF8FAFB);
   static const Color grey = Color(0xFF3A5160);
   static const Color nearlyBlue = Color(0xFF00B6F0);
+  static const Color nearlyRed = Color(0xFFEA5066);
   static const Color nearlyBlack = Color(0xFF213333);
 
 
   static const TextStyle ts1 = TextStyle(
     fontWeight: FontWeight.w600,
     fontSize: 22,
+    letterSpacing: 0.27,
+    color: darkerText,
+  );
+
+  static const TextStyle ts2 = TextStyle(
+    fontWeight: FontWeight.w600,
+    fontSize: 18,
     letterSpacing: 0.27,
     color: darkerText,
   );

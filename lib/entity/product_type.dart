@@ -1,4 +1,6 @@
 
+import 'package:flutter/widgets.dart';
+
 class ProductType {
   String name;
   int price;
@@ -24,4 +26,19 @@ class ProductType {
       'quantity': quantity
     };
   }
+
+  ProductType.fromController(ProductTypeController data)
+      : this(
+      name: data.name.text,
+      price: int.parse(data.price.text),
+      quantity: int.parse(data.quantity.text)
+  );
+}
+
+class ProductTypeController {
+  TextEditingController name = TextEditingController();
+  TextEditingController price = TextEditingController();
+  TextEditingController quantity = TextEditingController();
+
+  ProductTypeController();
 }

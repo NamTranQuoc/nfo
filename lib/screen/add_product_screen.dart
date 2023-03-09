@@ -3,10 +3,12 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:nfo/common/constant_theme.dart';
-import 'package:nfo/common/my_image_picker.dart';
 import 'package:nfo/common/storage.dart';
 
 import '../common/common_widget.dart';
+import '../entity/product.dart';
+import '../entity/product_type.dart';
+import '../repository/product_repository.dart';
 
 class AddProductScreen extends StatefulWidget {
   const AddProductScreen({Key? key}) : super(key: key);
@@ -18,10 +20,9 @@ class AddProductScreen extends StatefulWidget {
 class _AddProductScreenState extends State<AddProductScreen> {
   final ImagePicker _picker = ImagePicker();
   List<File> imageFiles = [];
+  List<ProductTypeController> types = [ProductTypeController()];
   TextEditingController name = TextEditingController();
   TextEditingController description = TextEditingController();
-  TextEditingController price = TextEditingController();
-  TextEditingController quantity = TextEditingController();
   TextEditingController category = TextEditingController();
   List<dynamic> selected = [];
 
@@ -45,12 +46,45 @@ class _AddProductScreenState extends State<AddProductScreen> {
               child: SingleChildScrollView(
                 child: Column(
                   children: <Widget>[
+                    const Padding(
+                      padding: EdgeInsets.only(top: 8.0, left: 16, right: 16),
+                      child: Text(
+                        'Hình ảnh',
+                        textAlign: TextAlign.left,
+                        style: ConstantTheme.ts2,
+                      ),
+                    ),
                     listImage(widthImage),
+                    const Divider(
+                      thickness: 2,
+                      endIndent: 32,
+                      indent: 32,
+                    ),
+                    const Padding(
+                      padding: EdgeInsets.only(top: 8.0, left: 16, right: 16),
+                      child: Text(
+                        'Thông tin chung',
+                        textAlign: TextAlign.left,
+                        style: ConstantTheme.ts2,
+                      ),
+                    ),
                     textField("Tên sản phẩm", name, type: TextInputType.text),
-                    textField("Giá bán", price, type: TextInputType.number),
-                    textField("Số lượng", quantity, type: TextInputType.number),
                     textField("Mô tả", description, type: TextInputType.multiline, maxLine: 4),
                     // multiSelectField("Ngành hàng", widget._categories, selected, setCategory)
+                    const Divider(
+                      thickness: 2,
+                      endIndent: 32,
+                      indent: 32,
+                    ),
+                    const Padding(
+                      padding: EdgeInsets.only(top: 8.0, left: 16, right: 16),
+                      child: Text(
+                        'Loại Sản phẩm',
+                        textAlign: TextAlign.left,
+                        style: ConstantTheme.ts2,
+                      ),
+                    ),
+                    listType(widthImage)
                   ],
                 ),
               ),
@@ -81,7 +115,16 @@ class _AddProductScreenState extends State<AddProductScreen> {
                     highlightColor: Colors.transparent,
                     onTap: () {
                       uploadImages().then((value) {
-                        print(value);
+                        Product product1 = Product(images: value,
+                            types: types.map((e) {
+                              return ProductType.fromController(e);
+                            }).toList(),
+                            createdDate: DateTime.now(),
+                            name: name.text,
+                            evaluate: 0.0,
+                            description: description.text,
+                            isFeatured: false);
+                        addProduct(product1);
                       });
                     },
                     child: const Center(
@@ -115,13 +158,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
 
   Widget listImage(double width) {
     if (imageFiles.isEmpty) {
-      return RaisedButton(
-        color: ConstantTheme.nearlyBlue,
-        onPressed: () {
-          _getFromGallery();
-        },
-        child: Text("Chọn hình ảnh"),
-      );
+      return buttonSelectImage();
     }
     return Column(
       children: buildImage(width),
@@ -177,14 +214,19 @@ class _AddProductScreenState extends State<AddProductScreen> {
       ));
       items = [];
     }
-    widgets.add(RaisedButton(
+    widgets.add(buttonSelectImage());
+    return widgets;
+  }
+
+  Widget buttonSelectImage() {
+    return RaisedButton(
       color: ConstantTheme.nearlyBlue,
       onPressed: () {
         _getFromGallery();
       },
-      child: Text("Chọn hình ảnh", style: TextStyle(color: ConstantTheme.nearlyWhite),),
-    ));
-    return widgets;
+      child: const Text("Chọn hình ảnh",
+        style: TextStyle(color: ConstantTheme.c6),),
+    );
   }
 
   Widget getAppBarUI() {
@@ -242,5 +284,74 @@ class _AddProductScreenState extends State<AddProductScreen> {
         ),
       ),
     );
+  }
+
+  Widget listType(double width) {
+    if (types.isEmpty) {
+      return widgetAddAndRemoveType();
+    }
+    List<Widget> list = types.map((e) {
+      return widgetType(e);
+    }).toList();
+    list.add(widgetAddAndRemoveType());
+    return Column(
+      children: list,
+    );
+  }
+
+  Widget widgetAddAndRemoveType() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        RaisedButton(
+          color: ConstantTheme.nearlyBlue,
+          onPressed: () {
+            _addType();
+          },
+          child: const Text("Thêm",
+              style: TextStyle(color: ConstantTheme.c6)),
+        ),
+        const SizedBox(width: 10,),
+        (types.length > 1) ? RaisedButton(
+          color: ConstantTheme.nearlyRed,
+          onPressed: () {
+            _removeType();
+          },
+          child: const Text("Xoá",
+              style: TextStyle(color: ConstantTheme.c6)),
+        ) : const SizedBox()
+      ],
+    );
+  }
+
+  Widget widgetType(ProductTypeController productType) {
+    return Container(
+      margin: const EdgeInsets.only(top: 8, bottom: 8, left: 16, right: 16),
+      padding: const EdgeInsets.only(bottom: 8),
+      decoration: BoxDecoration(
+          border: Border.all(color: ConstantTheme.c3),
+          borderRadius: BorderRadius.circular(8)
+      ),
+      child: Column(
+        children: [
+          textField("Tên loại", productType.name, type: TextInputType.text),
+          textField("Giá", productType.price, type: TextInputType.number),
+          textField("Số lượng", productType.quantity, type: TextInputType.number),
+        ],
+      ),
+    );
+  }
+
+  _addType() {
+    setState(() {
+      types.add(ProductTypeController());
+    });
+  }
+
+  _removeType() {
+    setState(() {
+      types.removeLast();
+    });
   }
 }

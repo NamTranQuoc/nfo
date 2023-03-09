@@ -5,6 +5,7 @@ import 'package:nfo/common/constant_theme.dart';
 import 'package:nfo/entity/product_type.dart';
 
 import '../common/parse.dart';
+import '../common/storage.dart';
 import '../entity/product.dart';
 
 class ProductDetailView extends StatefulWidget {
@@ -99,7 +100,7 @@ class _ProductDetailView extends State<ProductDetailView>
                         options: CarouselOptions(height: 400.0),
                         items: widget.product!.images.map((i) {
                           return Image.network(
-                            i,
+                              getDownloadUrl(i),
                             fit: BoxFit.fitWidth,
                           );
                         }).toList(),
