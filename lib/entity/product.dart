@@ -11,6 +11,7 @@ class Product {
   String description;
   bool isFeatured;
   DateTime createdDate;
+  List<String> categories;
 
   Product({
     this.id = '',
@@ -20,7 +21,8 @@ class Product {
     required this.types,
     this.description = '',
     this.isFeatured = false,
-    required this.createdDate
+    required this.createdDate,
+    required this.categories
   });
 
   Product.fromSnapshot(QueryDocumentSnapshot doc)
@@ -33,7 +35,8 @@ class Product {
           .map((e) => ProductType.fromJson(e)).toList(),
       description: doc['description'] as String,
       isFeatured: doc['is_featured'] as bool,
-      createdDate: (doc['created_date'] as Timestamp).toDate()
+      createdDate: (doc['created_date'] as Timestamp).toDate(),
+      categories: (doc['categories'] as List).cast<String>()
   );
 
   List<ProductType> toTypes(List<Map<String, Object>> data) {
@@ -53,7 +56,8 @@ class Product {
       'types': types.map((e) => e.toJson()).toList(),
       'description': description,
       'is_featured': isFeatured,
-      'created_date': createdDate
+      'created_date': createdDate,
+      'categories': categories
     };
   }
 }

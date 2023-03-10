@@ -10,7 +10,10 @@ Future<void> addProduct(Product product) async {
 
 Future<List<Product>> getAllProduct() async {
   List<Product> product = [];
-  await db.get()
+  await db
+      .orderBy('created_date')
+      .limit(10)
+      .get()
       .then((QuerySnapshot querySnapshot) {
     for (var doc in querySnapshot.docs) {
       product.add(Product.fromSnapshot(doc));

@@ -10,10 +10,10 @@ Widget textField(String label,
     {TextInputType type = TextInputType.text,
     int maxLine = 1, enable = true, validator}) {
   return Container(
-      margin: EdgeInsets.only(right: 25, left: 25, top: 10),
-      padding: EdgeInsets.only(left: 10, right: 10),
+      margin: const EdgeInsets.only(right: 25, left: 25, top: 10),
+      padding: const EdgeInsets.only(left: 10, right: 10),
       decoration: BoxDecoration(
-          borderRadius: BorderRadius.all(Radius.circular(8)),
+          borderRadius: const BorderRadius.all(Radius.circular(8)),
           border: Border.all(color: Colors.blueAccent)
       ),
       child: TextFormField(
@@ -52,10 +52,10 @@ Widget selectField(String label,
     TextEditingController controller,
     List<Map<String, dynamic>> item) {
   return Container(
-      margin: EdgeInsets.only(right: 25, left: 25, top: 10),
-      padding: EdgeInsets.only(left: 10, right: 10),
+      margin: const EdgeInsets.only(right: 25, left: 25, top: 10),
+      padding: const EdgeInsets.only(left: 10, right: 10),
       decoration: BoxDecoration(
-          borderRadius: BorderRadius.all(Radius.circular(8)),
+          borderRadius: const BorderRadius.all(Radius.circular(8)),
           border: Border.all(color: Colors.blueAccent)
       ),
       child: SelectFormField(
@@ -72,12 +72,12 @@ Widget selectField(String label,
         decoration: InputDecoration(
           labelText: label,
           border: InputBorder.none,
-          helperStyle: TextStyle(
+          helperStyle: const TextStyle(
             fontWeight: FontWeight.bold,
             fontSize: 16,
             color: ConstantTheme.c4,
           ),
-          labelStyle: TextStyle(
+          labelStyle: const TextStyle(
             fontWeight: FontWeight.w600,
             fontSize: 16,
             letterSpacing: 0.2,
@@ -89,33 +89,34 @@ Widget selectField(String label,
 }
 
 Widget multiSelectField(String label,
-    List items, List? selected, Function setState) {
+    List items, List? selected, Function setState, {validator}) {
   return Container(
-      margin: EdgeInsets.only(right: 25, left: 25, top: 10),
-      padding: EdgeInsets.only(left: 10, right: 10),
+      margin: const EdgeInsets.only(right: 25, left: 25, top: 10),
+      padding: const EdgeInsets.only(left: 4, right: 4),
       decoration: BoxDecoration(
-          borderRadius: BorderRadius.all(Radius.circular(8)),
+          borderRadius: const BorderRadius.all(Radius.circular(8)),
           border: Border.all(color: Colors.blueAccent)
       ),
       child: MultiSelectFormField(
         border: InputBorder.none,
-        autovalidate: AutovalidateMode.disabled,
+        validator: validator,
         chipBackGroundColor: Colors.red,
-        chipLabelStyle: TextStyle(fontWeight: FontWeight.bold),
-        dialogTextStyle: TextStyle(fontWeight: FontWeight.bold),
+        autovalidate: AutovalidateMode.onUserInteraction,
+        chipLabelStyle: const TextStyle(fontWeight: FontWeight.bold),
+        dialogTextStyle: const TextStyle(fontWeight: FontWeight.bold),
         checkBoxActiveColor: Colors.red,
         checkBoxCheckColor: Colors.green,
-        fillColor: Colors.white,
+        fillColor: Colors.transparent,
         title: Text(
           label,
-          style: TextStyle(fontSize: 12),
+          style: const TextStyle(fontSize: 12, color: Colors.grey),
         ),
-        dataSource: items,
+        dataSource: [{'id': '4w6wlYTvTgAGTxpPFUEV', 'name': 'Bàn Phím'}, {'id': '6g5lCrl3LOtUTKvpBWhZ', 'name': 'Tai Nghe'}, {'id': 'ExAptA5q6pKEabDJJhqV', 'name': 'Linh Kiện'}, {'id': 'HIsYSexweaLhwdfgOvIM', 'name': 'Chuột'}, {'id': 'SGcC8tzbWzXIvG2OKg1M', 'name': 'Điện Thoại'}, {'id': 'YTpnLtwWHmkQCCZE2GdJ', 'name': 'Màn Hình'}, {'id': 'yTpga6HcNpQErcCleUA0', 'name': 'Laptop'}],
         textField: 'name',
-        valueField: 'value',
+        valueField: 'id',
         okButtonLabel: 'Chọn',
         cancelButtonLabel: 'Huỷ',
-        // hintWidget: Text('Please choose one or more'),
+        hintWidget: const Text('Chọn một hoặc nhiều ngành hàng'),
         initialValue: selected,
         onSaved: (value) {
           if (value == null) return;

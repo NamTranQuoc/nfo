@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:nfo/common/constant_theme.dart';
 import 'package:nfo/common/storage.dart';
+import 'package:nfo/repository/category_repository.dart';
 
 import '../common/common_widget.dart';
 import '../entity/product.dart';
@@ -26,13 +27,29 @@ class _AddProductScreenState extends State<AddProductScreen> {
   TextEditingController name = TextEditingController();
   TextEditingController description = TextEditingController();
   TextEditingController category = TextEditingController();
-  List<dynamic> selected = [];
+  List<String> selected = [];
   final _formKey = GlobalKey<FormState>();
+  List<Map<String, Object?>> categories = [];
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+
+    asyncTasks() async {
+      await getAllCategory().then((value) {
+        for(var item in value) {
+          categories.add(item.toJson());
+        }
+        setState(() {});
+      });
+    }
+
+    asyncTasks();
+  }
+
+  setCategory(List<dynamic> values) {
+    setState(() => selected = values.map((e) => e.toString()).toList());
   }
 
   @override
@@ -75,7 +92,8 @@ class _AddProductScreenState extends State<AddProductScreen> {
                           ),
                           textField("Tên sản phẩm", name, type: TextInputType.text, enable: !_isLoading, validator: validateNotBlank),
                           textField("Mô tả", description, type: TextInputType.multiline, maxLine: 4, enable: !_isLoading, validator: validateNotBlank),
-                          // multiSelectField("Ngành hàng", widget._categories, selected, setCategory)
+                          multiSelectField("Ngành hàng", categories, selected, setCategory, validator: validateNotBlank),
+                          const SizedBox(height: 10,),
                           const Divider(
                             thickness: 2,
                             endIndent: 32,
@@ -129,6 +147,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
                                   name: name.text,
                                   evaluate: 0.0,
                                   description: description.text,
+                                  categories: selected,
                                   isFeatured: false);
                               addProduct(product1).then((value) {
                                 Navigator.pop(context);
