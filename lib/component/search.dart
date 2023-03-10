@@ -17,7 +17,7 @@ class _Search extends State<Search> {
         style: const TextStyle(
           fontFamily: 'WorkSans',
           fontWeight: FontWeight.bold,
-          fontSize: 16,
+          fontSize: 14,
           color: ConstantTheme.c3,
         ),
         keyboardType: TextInputType.text,
@@ -32,12 +32,12 @@ class _Search extends State<Search> {
           ),
           helperStyle: TextStyle(
             fontWeight: FontWeight.bold,
-            fontSize: 16,
+            fontSize: 14,
             color: ConstantTheme.c4,
           ),
           labelStyle: TextStyle(
             fontWeight: FontWeight.w600,
-            fontSize: 16,
+            fontSize: 14,
             letterSpacing: 0.2,
             color: ConstantTheme.c4,
           ),

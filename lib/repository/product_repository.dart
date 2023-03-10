@@ -8,13 +8,14 @@ Future<void> addProduct(Product product) async {
   await db.add(product.toJson());
 }
 
-Future<List<Product>> getAllProduct() async {
+Future<List<Product>> getAllProduct(String sort, int size, QuerySnapshot _querySnapshot) async {
   List<Product> product = [];
   await db
-      .orderBy('created_date')
-      .limit(10)
+      .orderBy(sort, descending: true)
+      .limit(size)
       .get()
       .then((QuerySnapshot querySnapshot) {
+        _querySnapshot = querySnapshot;
     for (var doc in querySnapshot.docs) {
       product.add(Product.fromSnapshot(doc));
     }

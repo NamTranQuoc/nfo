@@ -58,27 +58,20 @@ class _NavigationScreenState extends State<NavigationScreen> with TickerProvider
           title: appbar,
         ),
         backgroundColor: Colors.transparent,
-        body: FutureBuilder<bool>(
-          future: getData(),
-          builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
-            if (!snapshot.hasData) {
-              return const SizedBox();
-            } else {
-              return Stack(
-                children: <Widget>[
-                  tabBody,
-                  bottomBar(),
-                ],
-              );
-            }
-          },
+        body: Container(
+          padding: const EdgeInsets.only(top: 10),
+          child: Stack(
+            children: <Widget>[
+              tabBody,
+              bottomBar(),
+            ],
+          ),
         ),
       ),
     );
   }
 
   Future<bool> getData() async {
-    await Future<dynamic>.delayed(const Duration(milliseconds: 200));
     return true;
   }
 
