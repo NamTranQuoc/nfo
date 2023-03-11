@@ -5,10 +5,11 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:nfo/screen/login_screen.dart';
 import 'package:nfo/screen/navigation.dart';
-import 'package:nfo/service/auth_service.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 
+import 'common/constant_theme.dart';
 import 'firebase_options.dart';
 
 void main() async {
@@ -48,61 +49,32 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
           primarySwatch: Colors.blue
       ),
-      home: const NavigationScreen(),
+      home: FutureBuilder(
+        future: checkToken(),
+        builder: (context, snapshot) {
+          if (!snapshot.hasData) {
+            return const CircularProgressIndicator(
+              color: ConstantTheme.nearlyBlue,
+              strokeWidth: 3,
+            );
+          } else {
+            if (snapshot.data! == true) {
+              return const NavigationScreen();
+            } else {
+              return const LoginScreen();
+            }
+          }
+        },
+      ),
     ),
     );
   }
-}
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key? key, required this.title}) : super(key: key);
-
-  final String title;
-
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() async {
-    // createAuth("namtranquoc322@gmail.com", "QuocN@m123");
-    login("namtranquoc322@gmail.com", "QuocN@m123");
-    User? user = FirebaseAuth.instance.currentUser;
-    print(user);
-    // addCategory(Category(id: "", name: "abc"));
-    // logout();
-    setState(() {
-      _counter++;
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headline4,
-            ),
-          ],
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ),
-    );
+  Future<bool> checkToken() async {
+    if (FirebaseAuth.instance.currentUser != null) {
+      // print(FirebaseAuth.instance.currentUser?.uid);
+      return true;
+    }
+    return false;
   }
 }

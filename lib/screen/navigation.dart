@@ -88,7 +88,7 @@ class _NavigationScreenState extends State<NavigationScreen> with TickerProvider
               context,
               MaterialPageRoute<dynamic>(
                   builder: (BuildContext context) =>
-                      AddProductScreen(),
+                      const AddProductScreen(),
                   fullscreenDialog: true),
             );
           },
