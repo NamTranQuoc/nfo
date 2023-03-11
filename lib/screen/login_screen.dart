@@ -1,6 +1,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:nfo/common/constant_theme.dart';
+import 'package:nfo/main.dart';
 import 'package:nfo/service/auth_service.dart';
 
 import '../common/common_widget.dart';
@@ -86,7 +87,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                   context,
                                   MaterialPageRoute<dynamic>(
                                       builder: (BuildContext context) =>
-                                      const NavigationScreen(),
+                                      const MyApp(),
                                       fullscreenDialog: true),
                                 );
                               } else {
