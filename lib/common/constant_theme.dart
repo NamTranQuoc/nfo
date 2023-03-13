@@ -13,6 +13,7 @@ class ConstantTheme {
   static const Color nearlyBlue = Color(0xFF00B6F0);
   static const Color nearlyRed = Color(0xFFEA5066);
   static const Color nearlyBlack = Color(0xFF213333);
+  static const Color notWhite = Color(0xFFEDF0F2);
 
 
   static const TextStyle ts1 = TextStyle(
@@ -28,4 +29,6 @@ class ConstantTheme {
     letterSpacing: 0.27,
     color: darkerText,
   );
+
+  static const String fontName = 'WorkSans';
 }

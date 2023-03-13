@@ -13,6 +13,7 @@ class _Search extends State<Search> {
   @override
   Widget build(BuildContext context) {
     return Container(
+      margin: EdgeInsets.only(left: 32 ),
       child: TextFormField(
         style: const TextStyle(
           fontFamily: 'WorkSans',

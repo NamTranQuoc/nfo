@@ -6,7 +6,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:nfo/screen/login_screen.dart';
-import 'package:nfo/screen/navigation.dart';
+import 'package:nfo/screen/navigation_bar.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 
 import 'common/constant_theme.dart';
@@ -59,7 +59,7 @@ class MyApp extends StatelessWidget {
             );
           } else {
             if (snapshot.data! == true) {
-              return const NavigationScreen();
+              return const NavigationBarScreen();
             } else {
               return const LoginScreen();
             }

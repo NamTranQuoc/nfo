@@ -4,8 +4,8 @@ import 'package:firebase_storage/firebase_storage.dart';
 
 final storageRef = FirebaseStorage.instance.ref();
 
-Future<String> uploadImage(File file) async {
-  var path = 'images/${DateTime.now().millisecondsSinceEpoch}.png';
+Future<String> uploadImage(File file, {String? location}) async {
+  var path = location ?? 'images/${DateTime.now().millisecondsSinceEpoch}.png';
 // Create the file metadata
   final metadata = SettableMetadata(contentType: "image/png");
 

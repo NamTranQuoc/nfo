@@ -2,41 +2,38 @@ import 'dart:io';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:nfo/common/common_widget.dart';
 import 'package:nfo/common/constant_theme.dart';
 import 'package:nfo/common/storage.dart';
+import 'package:nfo/service/auth_service.dart';
 
 import '../common/default.dart';
 
-class PersonalInfoScreen extends StatefulWidget {
-  const PersonalInfoScreen({Key? key}) : super(key: key);
+class ChangePasswordScreen extends StatefulWidget {
+  const ChangePasswordScreen({Key? key}) : super(key: key);
 
   @override
-  _PersonalInfoScreenState createState() => _PersonalInfoScreenState();
+  _ChangePasswordScreenState createState() => _ChangePasswordScreenState();
 }
 
-class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
+class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
   final _formKey = GlobalKey<FormState>();
   User? user = FirebaseAuth.instance.currentUser;
-  TextEditingController name = TextEditingController();
-  TextEditingController phoneNumber = TextEditingController();
+  TextEditingController oldPass = TextEditingController();
+  TextEditingController newPass = TextEditingController();
+  TextEditingController verifyPass = TextEditingController();
   var _isLoading = false;
-  File? file;
-  final ImagePicker _picker = ImagePicker();
+  String? error;
+  bool success = false;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-
-    name.text = user!.displayName ?? '';
-    phoneNumber.text = user!.phoneNumber ?? '';
   }
 
   @override
   Widget build(BuildContext context) {
-    double width = (MediaQuery.of(context).size.width / 3) - 30;
     return Container(
       color: ConstantTheme.background,
       child: Scaffold(
@@ -44,7 +41,7 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
         appBar: AppBar(
           backgroundColor: ConstantTheme.background,
             title: const Text(
-              'Thông tin các nhân',
+              'Đổi mật khẩu',
               style: ConstantTheme.ts1,
             )
         ),
@@ -56,9 +53,17 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
                   key: _formKey,
                   child: Column(
                     children: [
-                      buildImage(width),
-                      textField("Tên", name),
-                      // textField("Số điện thoại", phoneNumber, type: TextInputType.number),
+                      const SizedBox(height: 200,),
+                      textField("Mật khẩu cũ", oldPass, isPassword: true, validator: validateNotBlank, enable: !_isLoading),
+                      textField("Mật khẩu mới", newPass, isPassword: true, validator: validateNotBlank, enable: !_isLoading),
+                      textField("Nhập lại mật khẩu", verifyPass, isPassword: true, validator: validateNotBlank, enable: !_isLoading),
+                      const SizedBox(height: 4,),
+                      error != null ? Text(error!,
+                          style: const TextStyle(color: ConstantTheme.nearlyRed, fontSize: 11))
+                          : const SizedBox(),
+                      success ? const Text('Cập nhật mật khẩu thành công',
+                          style: TextStyle(color: ConstantTheme.nearlyBlue, fontSize: 11))
+                          : const SizedBox(),
                     ],
                   ),
                 ),
@@ -89,12 +94,21 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
                     onPressed: _isLoading ? null : () async {
                       setState(() => _isLoading = true);
                       if (_formKey.currentState!.validate()) {
-                        await user?.updateDisplayName(name.text);
-                        if (file != null) {
-                          await uploadImage(file!, location: user!.photoURL).then((value) async {
-                            await user?.updatePhotoURL(value);
-                          });
-                        }
+                        await login(user!.email!, oldPass.text).then((value) async {
+                          if (value == null) {
+                            if (newPass.text == verifyPass.text) {
+                              await user?.updatePassword(newPass.text);
+                              error = null;
+                              success = true;
+                            } else {
+                              error = 'Xác nhận mật khẩu không đúng';
+                              success = false;
+                            }
+                          } else {
+                            error = 'Mật khẩu cũ không đúng';
+                            success = false;
+                          }
+                        });
                       }
                       setState(() {
                         _isLoading = false;
@@ -129,35 +143,10 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
     );
   }
 
-  _getFromGallery() async {
-    _picker.pickImage(source: ImageSource.gallery).then((value) {
-      if (value != null) {
-        file = File(value.path);
-        setState(() {});
-      }
-    }).onError((error, stackTrace) {
-      print("error" + error.toString());
-    });
-  }
-
-  Widget buildImage(double width) {
-    return InkWell(
-      onTap: _getFromGallery,
-      child: Container(
-          width: width,
-          height: width,
-          margin: const EdgeInsets.all(10),
-          decoration: BoxDecoration(
-              borderRadius: const BorderRadius.all(Radius.circular(8)),
-              border: Border.all(color: Colors.blueAccent)
-          ),
-          child: ClipRRect(
-              borderRadius: BorderRadius.circular(8.0),
-              child: AspectRatio(
-                aspectRatio: 1.0,
-                child: (file != null) ? Image.file(file!)
-                    : Image.network(getDownloadUrl(user!.photoURL ?? Default.noImagePath)),
-              ))),
-    );
+  String? validateNotBlank(value) {
+    if (value == null || value.isEmpty) {
+      return 'Dữ liệu không được để trống';
+    }
+    return null;
   }
 }
